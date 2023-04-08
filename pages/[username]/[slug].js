@@ -1,3 +1,4 @@
+import styles from "../../styles/Post.module.css";
 import { firestore, getUserWithUsername, postToJSON } from "@/lib/firebase";
 import {
   collection,
@@ -9,6 +10,8 @@ import {
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import { useDocumentData } from "react-firebase-hooks/firestore";
+import AuthCheck from "@/components/AuthCheck";
+import HeartButton from "@/components/Heart";
 
 // import styles from "../../styles/Post.module.css";
 
@@ -62,13 +65,22 @@ export default function Post(props) {
   const post = realtimePost || props.post;
 
   return (
-    <main>
+    <main className={styles.container}>
       <section>
         <PostContent post={post} />
       </section>
 
       <aside className="card">
         <p>
+          <AuthCheck
+            fallback={
+              <Link href={"/enter"}>
+                <button>Sign up to heart this post</button>
+              </Link>
+            }
+          >
+            <HeartButton postRef={postRef} />
+          </AuthCheck>
           <strong>{post.heartCount || 0} 🤍</strong>
         </p>
       </aside>
